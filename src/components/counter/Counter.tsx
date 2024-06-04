@@ -1,109 +1,87 @@
-import { Box, Card } from "@mui/material";
+import { Card } from "@mui/material";
+import React, { useState } from "react";
+import { DateTime } from "./DateTime";
+import { Step } from "./Step";
 import Button from "../common/Button/Button";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import React, { FC, useState } from "react";
-
-interface IStepProps {
-  step: number;
-  onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  nameCount: string;
-}
 
 export const Counter = () => {
-  const [step, setStep] = useState(1);
-  const [count, setCount] = useState(0);
+  const [state, setState] = useState({
+    step: 1,
+    count: 0
+  });
 
-  const countHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log(e.currentTarget.id);
+  const countHandler = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    countTitle?: string
+  ) => {
     if (e.currentTarget.id === "add") {
-      setCount((count) => count + step);
+      if (countTitle === "Step")
+        setState((s) => ({
+          ...s,
+          step: s.step + 1
+        }));
+      if (countTitle === "Count")
+        setState((s) => ({
+          ...s,
+          count: s.count + s.step
+        }));
     }
     if (e.currentTarget.id === "remove") {
-      setCount((count) => count - step);
+      if (countTitle === "Step")
+        setState((s) => ({
+          ...s,
+          step: s.step === 1 ? 1 : s.step - 1
+        }));
+      if (countTitle === "Count")
+        setState((s) => ({
+          ...s,
+          count: s.count - s.step
+        }));
     }
   };
-  const stepHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (e.currentTarget.id === "add") {
-      setStep((step) => step + 1);
-    }
-    if (e.currentTarget.id === "remove") {
-      if (step === 1) return;
-      setStep((step) => step - 1);
-    }
+
+  const onChangeHandler = (value: number, countTitle?: string) => {
+    if (countTitle === "Step")
+      setState((s) => ({
+        ...s,
+        step: value
+      }));
+    if (countTitle === "Count")
+      setState((s) => ({
+        ...s,
+        count: value
+      }));
   };
 
   return (
-    <Card>
-      <Step nameCount={"Step"} onClick={stepHandler} step={step} />
-      <Step nameCount={"Count"} onClick={countHandler} step={count} />
-      <DateTime count={count} />
-    </Card>
-  );
-};
-
-const Step: FC<IStepProps> = ({ nameCount, onClick, step }) => {
-  return (
-    <Box
+    <Card
       sx={{
+        width: "50%",
         display: "flex",
-        flexDirection: "row"
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <Button onClick={(e) => onClick(e)} id="remove">
-        <RemoveIcon />
-      </Button>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center"
-        }}
-      >
-        {nameCount}: {step}
-      </Box>
-      <Button onClick={(e) => onClick(e)} id="add">
-        <AddIcon />
-      </Button>
-    </Box>
-  );
-};
-
-interface DateTimeProps {
-  count: number;
-}
-
-const DateTime: FC<DateTimeProps> = ({ count }) => {
-  const date = new Date();
-  const addDays = (date: any, days: number) => {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    return result;
-  };
-
-  const formatDate = (date: any) => {
-    const options = {
-      month: "long",
-      weekday: "long",
-      day: "numeric",
-      year: "numeric"
-    };
-    return date.toLocaleDateString("uk-UA", options);
-  };
-
-  const message = (num: number): string => {
-    if (num === 0) return `today`;
-    if (num < 0) {
-      const str = num.toString().replace(/-/g, "");
-      return `${str} days ago was`;
-    }
-    return `${num} days from today is`;
-  };
-
-  const calcDate = addDays(date, count);
-  return (
-    <Box>
-      {message(count)} : {formatDate(calcDate)}
-    </Box>
+      <Step
+        type={"slider"}
+        fieldTitle={"Step"}
+        onClick={countHandler}
+        onChange={onChangeHandler}
+        count={state.step}
+      />
+      <Step
+        type={"input"}
+        fieldTitle={"Count"}
+        onClick={countHandler}
+        count={state.count}
+        onChange={onChangeHandler}
+      />
+      <DateTime count={state.count} />
+      <Button
+        children={"RESET"}
+        onClick={() => setState({ step: 1, count: 0 })}
+      />
+    </Card>
   );
 };

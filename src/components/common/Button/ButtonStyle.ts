@@ -3,12 +3,9 @@ import {
   Button,
   ButtonOwnProps,
   styled,
-  SxProps,
-  Theme
 } from "@mui/material";
 import { JSX } from "react";
 import { ButtonSizesType, isHex } from "../../common";
-import { useGetAttr } from "../hooks/hooks";
 import { ICustomButtonType } from "./Button";
 
 interface ICustomButton extends Omit<ButtonOwnProps, "size"> {
@@ -27,12 +24,9 @@ export const CustomButton = styled(Button)<ICustomButton>`
     isHex(props.background, "customButton") ? props.background : "#fff"};
 ` as (props: ICustomButton) => JSX.Element;
 
-interface ButtonContainerType extends ICustomButtonType {
-
-}
+interface ButtonContainerType extends ICustomButtonType {}
 
 export const ButtonContainer = styled(Box)<ButtonContainerType>`
-    display: flex;
-    align-items: center;
-
+  display: flex;
+  align-items: center;
 ` as (props: ButtonContainerType) => JSX.Element;
