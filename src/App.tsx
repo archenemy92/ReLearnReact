@@ -7,6 +7,7 @@ import { Counter } from "./components/counter/Counter";
 import { CheckListManager } from "./components/ChecklistManager/CheckListManager";
 import { TipCalculator } from "./components/TipCalculator/TipCalculator";
 import { SplitBill } from "./components/SplitBill/SplitBill";
+import RatingComponent from "./components/Rating/Rating";
 
 const App = () => {
   return (
@@ -15,7 +16,7 @@ const App = () => {
       justifyContent: "center",
       alignItems: "center"
     }}>
-      <SplitBill />
+      <RatingComponent />
     </Box>
   );
 };

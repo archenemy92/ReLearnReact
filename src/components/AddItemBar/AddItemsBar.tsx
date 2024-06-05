@@ -2,18 +2,20 @@ import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { Box, Input, SxProps, Theme } from "@mui/material";
 import {
   containerStyle,
-  duration, inputsContainerStyle,
+  duration,
+  inputsContainerStyle,
   listContainerStyle,
   numberInputStyle,
   textInputStyle,
   transitionStyles
 } from "./AddItemsBarStyle";
-import { generateListFromNumber, getStyle } from "./common";
+import { getStyle } from "./common";
 import Button from "../common/Button/Button";
 import { Transition, TransitionStatus } from "react-transition-group";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
 import { addItem } from "../../store/ListSlice";
+import { generateListFromNumber } from "../common/commonFunctions";
 
 interface IAddItemsBarProps {
   sx?: SxProps<Theme>;
@@ -85,13 +87,8 @@ export const AddItemsBar: FC<IAddItemsBarProps> = ({
   return (
     <Box sx={getStyle(sx, containerStyle)}>
       <Box>{descriptions}</Box>
-      <Box
-        sx={inputsContainerStyle}
-      >
-        <Box
-          className="transitionContainer"
-          onWheel={() => setIsOpen(false)}
-        >
+      <Box sx={inputsContainerStyle}>
+        <Box className="transitionContainer" onWheel={() => setIsOpen(false)}>
           <Input
             type="number"
             sx={getStyle(sxNumberInputStyle, numberInputStyle)}
